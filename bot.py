@@ -1,23 +1,19 @@
-import telegram
-from telegram.ext import *
+from telegram.ext import Updater, CommandHandler
 
 
-mi_bot = telegram.Bot(token='502678844:AAHREBEvtxfckKlnfF38_dVpLXu7BsNpjy0')
-mi_bot_updater = Updater(mi_bot.token)
+def start(bot, update):
+    update.message.reply_text(
+        'Yolo')
 
+def saluda(bot, update):
+    update.message.reply_text(
+        'Hola {}'.format(update.message.from_user.first_name))
+        
 
-def start(bot,updater,pass_chat_date = True):
-    updater.message.chat_id
-    bot.sendMessage(chat_id=updater.message.chat_id,text="Yolo")
+updater = Updater('502678844:AAHREBEvtxfckKlnfF38_dVpLXu7BsNpjy0')
 
-start_handler = CommandHandler('start',start)
+updater.dispatcher.add_handler(CommandHandler('start', start))
+updater.dispatcher.add_handler(CommandHandler('saluda', saluda))
 
-dispatcher = mi_bot_updater.dispatcher
-
-dispatcher.add_handler(start_handler)
-
-mi_bot_updater.start_polling()
-mi_bot_updater.start_idle()
-
-while True:
-    pass
+updater.start_polling()
+updater.idle()
