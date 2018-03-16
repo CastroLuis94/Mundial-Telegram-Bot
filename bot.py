@@ -1,7 +1,6 @@
 import locale
 
 from telegram.ext import Updater, CommandHandler
-from horarios import comienzo_del_mundial
 from auxiliares import *
 import telegram
 
@@ -11,6 +10,9 @@ locale.setlocale(locale.LC_TIME, 'es_AR.utf8')
 import logging
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+
+id_admin = 265964072
+
 
 
 def start(bot, update):
@@ -24,7 +26,7 @@ def listener(bot, update):
 
 def help(bot, update):
     update.message.reply_text(
-    """Estos son los comandos disponibles para usar:
+    """Este es un bot sin findes de lucro el cual aun esta en desarrollo, si quieren saber mas sobre este bot puede comunicarse con @Castroluis94.\n Estos son los comandos disponibles para usar:
 /grupos: Este comando devuelve una imagen de todos los grupos.
 /grupo X: Este comando toma una letra y devuelve la imagen de ese grupo solo
 /cuantoFalta: Este comando devuelve cuantos dias, horas y minutos faltan para que empiece el mundial.
@@ -33,7 +35,7 @@ def help(bot, update):
     )
 
 def grupos(bot, update):
-    bot.send_photo(chat_id=update.message.chat_id, photo=open('Grupos.png', 'rb'))
+    bot.send_photo(chat_id=update.message.chat_id, photo=open('Grupos.jpg', 'rb'))
 
 def datos(bot,update):
     message = update.message.text
@@ -70,12 +72,12 @@ def grupo(bot, update):
     )   
         return
     if grupo_seleccionado in grupos_del_mundial:
-        archivo = 'Grupo' + grupo_seleccionado + '.png'
+        archivo = 'Grupo' + grupo_seleccionado + '.jpg'
         bot.send_photo(chat_id=update.message.chat_id, photo=open(archivo, 'rb'))
        
     else:
         update.message.reply_text(
-            """Esta caracter no corresponde a un grupo valido, los grupos van de la A a la H.\n""" 
+            """Este caracter no corresponde a un grupo valido, los grupos van de la A a la H.\n""" 
     )
 
 def registrarse(bot, update):
@@ -128,6 +130,7 @@ def proximoPartido(bot,update):
         )  
     )
 
+
 def partidosde(bot,update):
     message = update.message.text
     message = message.lower()
@@ -142,9 +145,7 @@ def partidosde(bot,update):
     pais = session.query(Pais).filter_by(nombre=nombre).first()
     partidos_izquierda = session.query(Partidos).filter_by(equipo1=pais.id).order_by('horario')
     partidos_derecha = session.query(Partidos).filter_by(equipo2=pais.id).order_by('horario')
-    partidos = [elem for elem in partidos_izquierda]
-    for elem in partidos_derecha:
-        partidos.append(elem)
+    partidos = list(partidos_izquierda) + list(partidos_derecha)
     partido = ''
     for indice in range(0, len(partidos)):
         rival = partidos[indice].equipo1
@@ -155,6 +156,57 @@ def partidosde(bot,update):
         partido 
     )
 
+def modificar_partido(bot,update):
+    if update.message.chat_id == id_admin:
+        message = update.message.text
+        message = message.lower()
+        message = message.replace('/modificarpartido ','')
+        equipo1, equipo2 , resultado , clase = message.split(',')
+        session = Session()
+        pais1 = session.query(Pais).filter_by(nombre=equipo1).first()
+        pais2 = session.query(Pais).filter_by(nombre=equipo2).first()
+        partidos_izquierda =  session.query(Partidos).filter_by(equipo1=pais1.id).order_by('horario')
+        partidos_derecha = session.query(Partidos).filter_by(equipo2=pais1.id).order_by('horario')
+        partidos = list(partidos_izquierda) + list(partidos_derecha)
+        partido_a_modificar = None
+        for partido in partidos:
+            if clase == partido.clase_de_partido and (pais2.id == partido.equipo1 or pais2.id == partido.equipo2):
+                partido_a_modificar = partido 
+        if partido_a_modificar is None:
+            update.message.reply_text(
+                'El partido no existe'
+            )
+            return
+        partido_a_modificar.resultado = resultado
+        session.commit()
+        update.message.reply_text(
+                'Se ha modificado el partido con exito'
+            )
+        return
+    else:
+        update.message.reply_text(
+            'No sos admin.'
+        )
+
+def agregar_partido(bot,update):
+   if update.message.chat_id == id_admin:
+        message = update.message.text
+        message = message.lower()
+        message = message.replace('/agregarpartido','')
+        equipo1, equipo2 , horario = message.split(',')
+        session = Session()
+        pais1 = session.query(Pais).filter_by(nombre=equipo1).first()
+        pais2 = session.query(Pais).filter_by(nombre=equipo2).first()
+        partidos_izquierda =  session.query(Partidos).filter_by(equipo1=pais1.id).order_by('horario')
+        partidos_derecha = session.query(Partidos).filter_by(equipo2=pais1.id).order_by('horario')
+        partidos = list(partidos_izquierda) + list(partidos_derecha)
+        for partido in partidos:
+            if pais2.id == partido.equipo1 or pais2.id ==:
+        
+    else:
+        update.message.reply_text(
+            'No sos admin.'
+        )
 
 
 if __name__ == "__main__":
@@ -168,6 +220,7 @@ if __name__ == "__main__":
     updater.dispatcher.add_handler(CommandHandler('registrarse', registrarse))
     updater.dispatcher.add_handler(CommandHandler('proximopartido', proximoPartido))
     updater.dispatcher.add_handler(CommandHandler('partidosde', partidosde))
+    updater.dispatcher.add_handler(CommandHandler('modificarpartido', modificar_partido))
     ##updater.dispatcher.add_handler(CommandHandler('listen',listener))
 
     updater.start_polling()

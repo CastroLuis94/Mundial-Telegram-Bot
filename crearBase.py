@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, Column, Integer, String, Index, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Index, ForeignKey, Boolean
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.sql import func
 from sqlalchemy.ext.declarative import declarative_base
@@ -17,11 +17,11 @@ class Pais(Base):
     id = Column(Integer, primary_key=True)
     nombre = Column(String)
     grupo = Column(String)
-    #en_juego = Column(Bool)
+    en_juego = Column(Boolean)
     def __init__(self, nombre, grupo):
         self.nombre = nombre
         self.grupo = grupo
-        #self.en_juego = True
+        self.en_juego = True
 
 class Usuario(Base):
     __tablename__ = 'usuarios'
@@ -44,12 +44,14 @@ class Partidos(Base):
     horario = Column(String)
     resultado = Column(String)
     clase_de_partido = Column(String)
+    ya_termino = Column(Boolean)
     def __init__(self,equipo1,equipo2,horario,resultado,clase_de_partido):
         self.equipo1 = equipo1
         self.equipo2 = equipo2
         self.horario = horario
         self.resultado = resultado
         self.clase_de_partido = clase_de_partido
+        self.ya_termino = True
 
 
 Base.metadata.create_all(engine)
@@ -85,6 +87,7 @@ def levantar_paises(nombre_archivo):
 """
 def agregar_partidos(partidos):
     session = Session()
+    print(partidos)
     for partido in partidos:
         aAgregar = {
         'equipo1' : partido.equipo1,
@@ -109,19 +112,12 @@ def agregar_paises(paises):
             session.add(pais)
     session.commit()
 
+
 def agregar_partidos(partidos):
     session = Session()
     for partido in partidos:
-        pais1 = {
-            'nombre' : partido.equipo1
-        }
-        equipo1 = session.query(Pais).filter_by(**pais1).first()
-        equipo1 = equipo1.id
-        pais2 = {
-            'nombre' : partido.equipo2
-        }
-        equipo2 = session.query(Pais).filter_by(**pais2).first()
-        equipo2 = equipo2.id
+        equipo1 = session.query(Pais).filter_by(nombre = partido.equipo1).first().id
+        equipo2 = session.query(Pais).filter_by(nombre = partido.equipo2).first().id
         aAgregar = {
         'equipo1' : equipo1,
         'equipo2' : equipo2,
@@ -135,10 +131,11 @@ def agregar_partidos(partidos):
 
 
 if __name__ == "__main__":
-    partidos = levantar_partidos("partidos.csv")
-    #agregar_partidos(partidos)
     paises = levantar_paises("paises.csv")
     agregar_paises(paises)
+    partidos = levantar_partidos("partidos.csv")
+    agregar_partidos(partidos)
+    
     agregar_partidos(partidos)
     
     

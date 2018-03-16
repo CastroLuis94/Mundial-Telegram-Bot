@@ -12,15 +12,19 @@ def restar_hora(hora1,hora2):
         resultado = h1 - h2
         return "En {0} dias, {1} horas y {2} minutos".format(resultado.days, resultado.seconds // 3600 , resultado.seconds // 60 % 60)
 
+
+formato = "%Y:%m:%d:%H:%M"
+comienzo_del_mundial = datetime.strptime("2018:6:14:15:00", formato)
+
 sinonimos = {
     'argentina' : []
     ,'rusia' : ['russia','pоссия']
-    ,'arabia saudita' : ['arabia','saudita','saudi arabia','العربية السعودية']
+    ,'arabia saudita' : ['arabia', 'arabia saudi','saudita','saudi arabia','العربية السعودية']
     ,'egipto' : ['egypt','مصر']
     ,'portugal' : []
     ,'españa' : ['spain']
     ,'marruecos' : ['morocco','المغرب']
-    ,'iran' : ['irán','ایران']
+    ,'iran' : ['ri de iran', 'ri de irán','irán','ایران']
     ,'francia' : ['france']
     ,'australia' : []
     ,'peru' : ['perú']
@@ -35,7 +39,7 @@ sinonimos = {
     ,'alemania' : ['germany','deutschland']
     ,'mexico' : ['méxico']
     ,'suecia' : ['sweden','sverige']
-    ,'corea del sur' : ['south korea','대한민국','corea']
+    ,'corea del sur' : ['republica de corea', '','south korea','대한민국','corea']
     ,'belgica' : ['bélgica','belgium','belgique','belgien']
     ,'panama' : ['panamá']
     ,'inglaterra' : ['england']
@@ -59,6 +63,8 @@ def traducir_pais(id_pais):
     session = Session()
     pais = session.query(Pais).filter_by(id=int(id_pais)).first()
     return pais.nombre
+
+
 
 def partidos_contra(numero_partido,enemigo,partido):
     horario = datetime.strptime(partido.horario, "%Y:%m:%d:%H:%M")
