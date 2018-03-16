@@ -189,20 +189,39 @@ def modificar_partido(bot,update):
         )
 
 def agregar_partido(bot,update):
-   if update.message.chat_id == id_admin:
+    if update.message.chat_id == id_admin:
         message = update.message.text
         message = message.lower()
         message = message.replace('/agregarpartido','')
-        equipo1, equipo2 , horario = message.split(',')
+        partido = message.split(',')
+        equipo1, equipo2 , horario, clase = partido
+        equipo1 = equipo1.strip()
+        equipo2 = equipo2.strip()
+        horario = horario.strip()
+        clase = clase.strip()
         session = Session()
         pais1 = session.query(Pais).filter_by(nombre=equipo1).first()
         pais2 = session.query(Pais).filter_by(nombre=equipo2).first()
+        if pais1 is None or pais2 is None:
+            update.message.reply_text(
+                'El nombre de algun pais esta mal'
+            )
+            return
         partidos_izquierda =  session.query(Partidos).filter_by(equipo1=pais1.id).order_by('horario')
         partidos_derecha = session.query(Partidos).filter_by(equipo2=pais1.id).order_by('horario')
         partidos = list(partidos_izquierda) + list(partidos_derecha)
         for partido in partidos:
-            if pais2.id == partido.equipo1 or pais2.id ==:
-        
+            if partido.ya_termino == False and (pais2.id == partido.equipo1 or pais2.id == partido.equipo2):
+                update.message.reply_text(
+                    'El partido ya existe.'
+                )
+                return
+        partido_a_agregar = Partidos(pais1.id,pais2.id,horario,clase)
+        session.add(partido_a_agregar)
+        session.commit()
+        update.message.reply_text(
+            'Partido agregado exitosamente'
+        )
     else:
         update.message.reply_text(
             'No sos admin.'
@@ -221,6 +240,7 @@ if __name__ == "__main__":
     updater.dispatcher.add_handler(CommandHandler('proximopartido', proximoPartido))
     updater.dispatcher.add_handler(CommandHandler('partidosde', partidosde))
     updater.dispatcher.add_handler(CommandHandler('modificarpartido', modificar_partido))
+    updater.dispatcher.add_handler(CommandHandler('agregarpartido', agregar_partido))
     ##updater.dispatcher.add_handler(CommandHandler('listen',listener))
 
     updater.start_polling()

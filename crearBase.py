@@ -45,13 +45,13 @@ class Partidos(Base):
     resultado = Column(String)
     clase_de_partido = Column(String)
     ya_termino = Column(Boolean)
-    def __init__(self,equipo1,equipo2,horario,resultado,clase_de_partido):
+    def __init__(self,equipo1,equipo2,horario,clase_de_partido):
         self.equipo1 = equipo1
         self.equipo2 = equipo2
         self.horario = horario
-        self.resultado = resultado
+        self.resultado = '0-0'
         self.clase_de_partido = clase_de_partido
-        self.ya_termino = True
+        self.ya_termino = False
 
 
 Base.metadata.create_all(engine)
@@ -69,7 +69,7 @@ def levantar_partidos(nombre_archivo):
         horario = datos_partido[2]
         resultado = datos_partido[3]
         clase_de_partido = datos_partido[4]
-        partidos.append(Partidos(equipo1,equipo2,horario,resultado,clase_de_partido))
+        partidos.append(Partidos(equipo1,equipo2,horario,clase_de_partido))
     return partidos
 
 def levantar_paises(nombre_archivo):
@@ -125,7 +125,7 @@ def agregar_partidos(partidos):
         }
         ya_esta = session.query(Partidos).filter_by(**aAgregar).first()
         if ya_esta is None:
-            partido_ID = Partidos(equipo1, equipo2, partido.horario, partido.resultado, partido.clase_de_partido)
+            partido_ID = Partidos(equipo1, equipo2, partido.horario, partido.clase_de_partido)
             session.add(partido_ID)
     session.commit()
 
