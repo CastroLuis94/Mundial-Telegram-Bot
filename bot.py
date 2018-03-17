@@ -2,6 +2,7 @@ import locale
 
 from telegram.ext import Updater, CommandHandler
 from auxiliares import *
+from funciones_admin import *
 import telegram
 
 locale.setlocale(locale.LC_TIME, 'es_AR.utf8')
@@ -10,9 +11,6 @@ locale.setlocale(locale.LC_TIME, 'es_AR.utf8')
 import logging
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-
-id_admin = 265964072
-
 
 
 def start(bot, update):
@@ -112,23 +110,35 @@ def proximoPartido(bot,update):
         return
     session = Session()
     pais = session.query(Pais).filter_by(nombre=nombre).first()
-    proximo_partido_izquierda = session.query(Partidos).filter_by(equipo1=pais.id).order_by('horario').first()
-    proximo_partido_derecha = session.query(Partidos).filter_by(equipo2=pais.id).order_by('horario').first()
-    proximo_partido = proximo_partido_derecha if proximo_partido_derecha.horario < proximo_partido_izquierda.horario else proximo_partido_izquierda
-    if nombre == traducir_pais(proximo_partido.equipo1):
-        enemigo = session.query(Pais).filter_by(id=proximo_partido.equipo2).first()
-    else:
-        enemigo = session.query(Pais).filter_by(id=proximo_partido.equipo1).first()
+    proximo_partido_izquierda = session.query(Partidos).filter_by(equipo1=pais.id).order_by('horario')
+    proximo_partido_derecha = session.query(Partidos).filter_by(equipo2=pais.id).order_by('horario')
+    proximo_partidos = list(proximo_partido_izquierda) + list(proximo_partido_derecha)
+    proximo_mas_temprano = None
+    for partido in proximo_partidos:
+        if partido.ya_termino is False:
+            if proximo_mas_temprano is None:
+                proximo_mas_temprano = partido
+            if partido.horario < proximo_mas_temprano.horario:
+                proximo_mas_temprano = partido
     
-    horario = datetime.strptime(proximo_partido.horario, "%Y:%m:%d:%H:%M")
-
-    update.message.reply_text(
-        'El proximo partido de {0} es el {1} contra {2}'.format(
-            pais.nombre,
-            horario.strftime('%A %d de %B a las %H:%M'),
-            enemigo.nombre
-        )  
-    )
+    if proximo_mas_temprano != None:
+        if nombre == traducir_pais(proximo_mas_temprano.equipo1):
+            enemigo = session.query(Pais).filter_by(id=proximo_mas_temprano.equipo2).first()
+        else:
+            enemigo = session.query(Pais).filter_by(id=proximo_mas_temprano.equipo1).first()
+        
+        horario = datetime.strptime(proximo_mas_temprano.horario, "%Y:%m:%d:%H:%M")
+        update.message.reply_text(
+            'El proximo partido de {0} es el {1} contra {2}'.format(
+                pais.nombre,
+                horario.strftime('%A %d de %B a las %H:%M'),
+                enemigo.nombre
+            )  
+        )
+    else:
+        update.message.reply_text(
+            'Este pais no tiene proximos partidos registrados.'
+        )
 
 
 def partidosde(bot,update):
@@ -147,85 +157,80 @@ def partidosde(bot,update):
     partidos_derecha = session.query(Partidos).filter_by(equipo2=pais.id).order_by('horario')
     partidos = list(partidos_izquierda) + list(partidos_derecha)
     partido = ''
+    partidos_agregados = 1
     for indice in range(0, len(partidos)):
-        rival = partidos[indice].equipo1
-        horario = datetime.strptime(partidos[indice].horario, "%Y:%m:%d:%H:%M")
-        partido += partidos_contra(str(indice + 1),rival, partidos[indice])
+        if partidos[indice].ya_termino is False:
+            rival = partidos[indice].equipo1
+            horario = datetime.strptime(partidos[indice].horario, "%Y:%m:%d:%H:%M")
+            partido += partidos_contra(str(partidos_agregados),rival, partidos[indice])
+            partidos_agregados += 1
 
+    if partido != '':
+        update.message.reply_text(
+            partido 
+        )
+    else:
+        update.message.reply_text(
+            'Este pais no tiene futuros partidos registrados.' 
+        )
+
+
+
+
+def estadisticas(bot, update):
+    message = update.message.text
+    message = message.lower()
+    message = message.replace('/estadisticas','')
+    message = message.strip()
+    session = Session()
+    print(message)
+    pais = session.query(Pais).filter_by(nombre=message).first()
+    partidos_izquierda =  session.query(Partidos).filter_by(equipo1=pais.id).order_by('horario')
+    partidos_derecha = session.query(Partidos).filter_by(equipo2=pais.id).order_by('horario')
+    partidos = list(partidos_izquierda) + list(partidos_derecha)
+    victorias = 0
+    empates = 0
+    derrotas = 0
+    goles_favor = 0
+    goles_contra = 0
+    partidos_jugados = 0
+    for partido in partidos:
+        if partido.ya_termino:
+            if pais.id == partido.equipo1:
+                goles_equipo1 , goles_equipo2 = partido.resultado.split('-')
+                goles_equipo1 = int(goles_equipo1)
+                goles_equipo2 = int(goles_equipo2)
+                if goles_equipo1 > goles_equipo2:
+                    victorias += 1
+                else:
+                    if goles_equipo1 == goles_equipo2:
+                        empates += 1
+                    else:
+                        derrotas += 1
+                goles_favor += goles_equipo1
+                goles_contra += goles_equipo2
+            else:
+                goles_equipo1 , goles_equipo2 = partido.resultado.split('-')
+                goles_equipo1 = int(goles_equipo1)
+                goles_equipo2 = int(goles_equipo2)
+                if goles_equipo1 > goles_equipo2:
+                    derrotas += 1
+                else:
+                    if goles_equipo1 == goles_equipo2:
+                        empates += 1
+                    else:
+                        victorias += 1
+                goles_favor += goles_equipo2
+                goles_contra += goles_equipo1
+            partidos_jugados += 1
     update.message.reply_text(
-        partido 
+        """ victorias : {0}. empates: {1}. derrotas: {2}. \ngoles a favor: {3}. goles en contra: {4}. partidos jugados: {5}""".format(
+        victorias,empates,derrotas,goles_favor,goles_contra,partidos_jugados)
     )
+    
+            
 
-def modificar_partido(bot,update):
-    if update.message.chat_id == id_admin:
-        message = update.message.text
-        message = message.lower()
-        message = message.replace('/modificarpartido ','')
-        equipo1, equipo2 , resultado , clase = message.split(',')
-        session = Session()
-        pais1 = session.query(Pais).filter_by(nombre=equipo1).first()
-        pais2 = session.query(Pais).filter_by(nombre=equipo2).first()
-        partidos_izquierda =  session.query(Partidos).filter_by(equipo1=pais1.id).order_by('horario')
-        partidos_derecha = session.query(Partidos).filter_by(equipo2=pais1.id).order_by('horario')
-        partidos = list(partidos_izquierda) + list(partidos_derecha)
-        partido_a_modificar = None
-        for partido in partidos:
-            if clase == partido.clase_de_partido and (pais2.id == partido.equipo1 or pais2.id == partido.equipo2):
-                partido_a_modificar = partido 
-        if partido_a_modificar is None:
-            update.message.reply_text(
-                'El partido no existe'
-            )
-            return
-        partido_a_modificar.resultado = resultado
-        session.commit()
-        update.message.reply_text(
-                'Se ha modificado el partido con exito'
-            )
-        return
-    else:
-        update.message.reply_text(
-            'No sos admin.'
-        )
 
-def agregar_partido(bot,update):
-    if update.message.chat_id == id_admin:
-        message = update.message.text
-        message = message.lower()
-        message = message.replace('/agregarpartido','')
-        partido = message.split(',')
-        equipo1, equipo2 , horario, clase = partido
-        equipo1 = equipo1.strip()
-        equipo2 = equipo2.strip()
-        horario = horario.strip()
-        clase = clase.strip()
-        session = Session()
-        pais1 = session.query(Pais).filter_by(nombre=equipo1).first()
-        pais2 = session.query(Pais).filter_by(nombre=equipo2).first()
-        if pais1 is None or pais2 is None:
-            update.message.reply_text(
-                'El nombre de algun pais esta mal'
-            )
-            return
-        partidos_izquierda =  session.query(Partidos).filter_by(equipo1=pais1.id).order_by('horario')
-        partidos_derecha = session.query(Partidos).filter_by(equipo2=pais1.id).order_by('horario')
-        partidos = list(partidos_izquierda) + list(partidos_derecha)
-        for partido in partidos:
-            if partido.ya_termino == False and (pais2.id == partido.equipo1 or pais2.id == partido.equipo2):
-                update.message.reply_text(
-                    'El partido ya existe.'
-                )
-                return
-        partido_a_agregar = Partidos(pais1.id,pais2.id,horario,clase)
-        session.add(partido_a_agregar)
-        session.commit()
-        update.message.reply_text(
-            'Partido agregado exitosamente'
-        )
-    else:
-        update.message.reply_text(
-            'No sos admin.'
-        )
 
 
 if __name__ == "__main__":
@@ -241,6 +246,8 @@ if __name__ == "__main__":
     updater.dispatcher.add_handler(CommandHandler('partidosde', partidosde))
     updater.dispatcher.add_handler(CommandHandler('modificarpartido', modificar_partido))
     updater.dispatcher.add_handler(CommandHandler('agregarpartido', agregar_partido))
+    updater.dispatcher.add_handler(CommandHandler('estadisticas', estadisticas))
+    updater.dispatcher.add_handler(CommandHandler('terminarpartido', terminar_partido))
     ##updater.dispatcher.add_handler(CommandHandler('listen',listener))
 
     updater.start_polling()

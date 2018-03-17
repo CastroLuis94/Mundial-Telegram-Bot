@@ -20,7 +20,7 @@ class Pais(Base):
     en_juego = Column(Boolean)
     def __init__(self, nombre, grupo):
         self.nombre = nombre
-        self.grupo = grupo
+        self.grupo = grupo.strip()
         self.en_juego = True
 
 class Usuario(Base):
@@ -50,7 +50,7 @@ class Partidos(Base):
         self.equipo2 = equipo2
         self.horario = horario
         self.resultado = '0-0'
-        self.clase_de_partido = clase_de_partido
+        self.clase_de_partido = clase_de_partido.strip()
         self.ya_termino = False
 
 
