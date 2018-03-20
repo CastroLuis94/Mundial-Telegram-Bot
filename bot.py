@@ -183,7 +183,6 @@ def estadisticas(bot, update):
     message = message.replace('/estadisticas','')
     message = message.strip()
     session = Session()
-    print(message)
     pais = session.query(Pais).filter_by(nombre=message).first()
     partidos_izquierda =  session.query(Partidos).filter_by(equipo1=pais.id).order_by('horario')
     partidos_derecha = session.query(Partidos).filter_by(equipo2=pais.id).order_by('horario')
@@ -228,7 +227,14 @@ def estadisticas(bot, update):
         victorias,empates,derrotas,goles_favor,goles_contra,partidos_jugados)
     )
     
-            
+
+def tabla_grupo(bot,update):
+    message = update.message.text
+    message = message.lower()
+    message = message.replace('/tablagrupo','')
+    grupo = message.strip()
+    bot.send_photo(chat_id=update.message.chat_id, photo=open('Tabla{0}.jpg'.format(grupo.upper()), 'rb'))
+ 
 
 
 
@@ -248,6 +254,8 @@ if __name__ == "__main__":
     updater.dispatcher.add_handler(CommandHandler('agregarpartido', agregar_partido))
     updater.dispatcher.add_handler(CommandHandler('estadisticas', estadisticas))
     updater.dispatcher.add_handler(CommandHandler('terminarpartido', terminar_partido))
+    updater.dispatcher.add_handler(CommandHandler('menuadmin', menu_admin))
+    updater.dispatcher.add_handler(CommandHandler('tablagrupo', tabla_grupo))
     ##updater.dispatcher.add_handler(CommandHandler('listen',listener))
 
     updater.start_polling()

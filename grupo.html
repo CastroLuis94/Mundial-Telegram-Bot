@@ -1,77 +1,71 @@
 <html>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <body>
             <table class="table">
                     <thead>
                       <tr>
-                        <th><abbr title="Position">Pos</abbr></th>
+                        <th><abbr title="Position">Posicion. </abbr></th>
                         <th>Equipo</th>
-                        <th>Jug</th>
+                        <th>  Pts</th>
                         <th>G</th>
                         <th>E</th>
                         <th>P</th>
                         <th>GF</th>
                         <th>GC</th>
-                        <th>GD</th>
-                        <th>Pts</th>
+                        
+                        
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
                         <th>1</th>
-                        <td>Argentina</strong>
+                        <td>{{info_paises[0]['nombre'].title()}}</strong>
                         </td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td></td>
+                        <td>{{info_paises[0]['puntos']}}</td>
+                        <td>{{info_paises[0]['victorias']}}</td>
+                        <td>{{info_paises[0]['empates']}}</td>
+                        <td>{{info_paises[0]['derrotas']}}</td>
+                        <td>{{info_paises[0]['goles_favor']}}</td>
+                        <td>{{info_paises[0]['goles_contra']}}</td>
                       </tr>
-                    <tr>
+                      <tr>
                         <th>2</th>
-                        <td>Croacia</strong>
+                        <td>{{info_paises[1]['nombre'].title()}}</strong>
                         </td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td></td>
+                        <td>{{info_paises[1]['puntos']}}</td>
+                        <td>{{info_paises[1]['victorias']}}</td>
+                        <td>{{info_paises[1]['empates']}}</td>
+                        <td>{{info_paises[1]['derrotas']}}</td>
+                        <td>{{info_paises[1]['goles_favor']}}</td>
+                        <td>{{info_paises[1]['goles_contra']}}</td>
                       </tr>
-                    <tr>
-                    <tr>
+                      <tr>
                         <th>3</th>
-                        <td>Islandia</strong>
+                        <td>{{info_paises[2]['nombre'].title()}}</strong>
                         </td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td></td>
+                        <td>{{info_paises[2]['puntos']}}</td>
+                        <td>{{info_paises[2]['victorias']}}</td>
+                        <td>{{info_paises[2]['empates']}}</td>
+                        <td>{{info_paises[2]['derrotas']}}</td>
+                        <td>{{info_paises[2]['goles_favor']}}</td>
+                        <td>{{info_paises[2]['goles_contra']}}</td>
                       </tr>
-                    <tr>
-                    <tr>
+                      <tr>
                         <th>4</th>
-                        <td>Nigeria</strong>
+                        <td>{{info_paises[3]['nombre'].title()}}</strong>
                         </td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td></td>
+                        <td>{{info_paises[3]['puntos']}}</td>
+                        <td>{{info_paises[3]['victorias']}}</td>
+                        <td>{{info_paises[3]['empates']}}</td>
+                        <td>{{info_paises[3]['derrotas']}}</td>
+                        <td>{{info_paises[3]['goles_favor']}}</td>
+                        <td>{{info_paises[3]['goles_contra']}}</td>
                       </tr>
-                    <tr>
                     </tbody>
                   </table>
     </body>
