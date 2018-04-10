@@ -3,9 +3,12 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <body>
             <table class="table">
+                  
                     <thead>
+                        <td id="header" colspan="8"><h2>Mundial Rusia 2018 Tabla Grupo {{letra.title()}}</h2> </td>
                       <tr>
-                        <th><abbr title="Position">Posicion. </abbr></th>
+                       
+                        <th><abbr title="Position">Pos. </abbr></th>
                         <th>Equipo</th>
                         <th>  Pts</th>
                         <th>G</th>
@@ -19,10 +22,10 @@
                     </thead>
                     <tbody>
                       <tr>
-                        <th>1</th>
-                        <td>{{info_paises[0]['nombre'].title()}}</strong>
-                        </td>
-                        <td></td>
+                        <td>1</td>
+                        <td align = left>
+                          <img align = left src= "{{info_paises[0]['foto']}}"  alt="bandera" width="60px" height="30px" />
+                          {{info_paises[0]['nombre'].title()}}</strong>                  
                         <td>{{info_paises[0]['puntos']}}</td>
                         <td>{{info_paises[0]['victorias']}}</td>
                         <td>{{info_paises[0]['empates']}}</td>
@@ -31,10 +34,8 @@
                         <td>{{info_paises[0]['goles_contra']}}</td>
                       </tr>
                       <tr>
-                        <th>2</th>
-                        <td>{{info_paises[1]['nombre'].title()}}</strong>
-                        </td>
-                        <td></td>
+                        <td>2</td>
+                        <td align = left><img align = left src= "{{info_paises[1]['foto']}}"  alt="bandera" width="60px" height="30px" /> {{info_paises[1]['nombre'].title()}}</strong>
                         <td>{{info_paises[1]['puntos']}}</td>
                         <td>{{info_paises[1]['victorias']}}</td>
                         <td>{{info_paises[1]['empates']}}</td>
@@ -43,10 +44,8 @@
                         <td>{{info_paises[1]['goles_contra']}}</td>
                       </tr>
                       <tr>
-                        <th>3</th>
-                        <td>{{info_paises[2]['nombre'].title()}}</strong>
-                        </td>
-                        <td></td>
+                        <td>3</td>
+                        <td align = left><img align = left src= "{{info_paises[2]['foto']}}"  alt="bandera" width="60px" height="30px" />{{info_paises[2]['nombre'].title()}}</strong>
                         <td>{{info_paises[2]['puntos']}}</td>
                         <td>{{info_paises[2]['victorias']}}</td>
                         <td>{{info_paises[2]['empates']}}</td>
@@ -55,10 +54,8 @@
                         <td>{{info_paises[2]['goles_contra']}}</td>
                       </tr>
                       <tr>
-                        <th>4</th>
-                        <td>{{info_paises[3]['nombre'].title()}}</strong>
-                        </td>
-                        <td></td>
+                        <td>4</td>
+                        <td align = left ><img align = left src= "{{info_paises[3]['foto']}}"  alt="bandera" width="60px" height="30px" />{{info_paises[3]['nombre'].title()}}</strong>
                         <td>{{info_paises[3]['puntos']}}</td>
                         <td>{{info_paises[3]['victorias']}}</td>
                         <td>{{info_paises[3]['empates']}}</td>

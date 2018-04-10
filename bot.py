@@ -29,8 +29,17 @@ def help(bot, update):
 /grupo X: Este comando toma una letra y devuelve la imagen de ese grupo solo
 /cuantoFalta: Este comando devuelve cuantos dias, horas y minutos faltan para que empiece el mundial.
 /proximoPartido X: Este comando toma un pais y te devuelve el proximo partido de ese equipo.
-/partidosde X: Este comando toma un pais y devuelve TODOS los partidos que tiene programado ese equipo. """ 
-    )
+/partidosde X: Este comando toma un pais y devuelve TODOS los partidos que tiene programado ese equipo.  
+/tabla X: Toma una letra de un grupo y te devuelve la tabla de resultados de ese grupo.  """
+  )
+
+def tabla(bot,update):
+    message = update.message.text
+    message = message.lower()
+    message = message.replace('/tabla','')
+    grupo = message.strip()
+    bot.send_photo(chat_id=update.message.chat_id, photo=open('Tabla{0}.jpg'.format(grupo.upper()), 'rb'))
+ 
 
 def grupos(bot, update):
     bot.send_photo(chat_id=update.message.chat_id, photo=open('Grupos.jpg', 'rb'))
@@ -227,13 +236,6 @@ def estadisticas(bot, update):
         victorias,empates,derrotas,goles_favor,goles_contra,partidos_jugados)
     )
     
-
-def tabla_grupo(bot,update):
-    message = update.message.text
-    message = message.lower()
-    message = message.replace('/tablagrupo','')
-    grupo = message.strip()
-    bot.send_photo(chat_id=update.message.chat_id, photo=open('Tabla{0}.jpg'.format(grupo.upper()), 'rb'))
  
 
 
@@ -255,7 +257,7 @@ if __name__ == "__main__":
     updater.dispatcher.add_handler(CommandHandler('estadisticas', estadisticas))
     updater.dispatcher.add_handler(CommandHandler('terminarpartido', terminar_partido))
     updater.dispatcher.add_handler(CommandHandler('menuadmin', menu_admin))
-    updater.dispatcher.add_handler(CommandHandler('tablagrupo', tabla_grupo))
+    updater.dispatcher.add_handler(CommandHandler('tabla', tabla))
     ##updater.dispatcher.add_handler(CommandHandler('listen',listener))
 
     updater.start_polling()

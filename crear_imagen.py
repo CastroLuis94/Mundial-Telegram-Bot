@@ -12,10 +12,11 @@ def crearTabla(letra):
     paises = session.query(Pais).filter_by(grupo=letra)
     info_paises = []
     for pais in paises:
+        foto = "../home/luis/dev/Mundial-Telegram-Bot/banderas/{0}.jpg".format(pais.nombre[:])
         puntos,victorias,empates,derrotas,goles_favor,goles_contra = info_equipo(pais.nombre)
         data_pais = {'nombre':pais.nombre,'puntos': puntos, 'victorias': victorias,
                         'empates': empates, 'derrotas' : derrotas, 'goles_favor': goles_favor,
-                        'goles_contra': goles_contra}
+                        'goles_contra': goles_contra, 'foto' : foto}
         info_paises.append(data_pais)
     info_paises = sorted(info_paises,key=lambda dict:  dict['nombre'])
     info_paises = sorted(info_paises,key=lambda dict:  dict['goles_contra'] - dict['goles_favor'] )
@@ -24,7 +25,7 @@ def crearTabla(letra):
     with open(os.path.join(BASE_PATH,'grupo.html'), 'r') as f:
         template = Template(f.read())
     css = os.path.join(BASE_PATH, 'grupo.css')
-    img = imgkit.from_string(template.render(info_paises=info_paises), 'Tabla{0}.jpg'.format(letra.upper()), css=css)
+    img = imgkit.from_string(template.render(info_paises=info_paises , letra = letra), 'Tabla{0}.jpg'.format(letra.upper()), css=css)
 
 
 if __name__ == "__main__":
