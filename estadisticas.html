@@ -1,54 +1,52 @@
+<!DOCTYPE html>
 <html>
-        
-    <body>
-          <link rel="stylesheet" href="grupo.css">
-            <table class="table">
-                  
-                    <thead>
-                        <td id="header" colspan="8"><h2>Mundial Rusia 2018 Estadisticas Argentina</h2> </td>
-                      <tr>
-                       
-                        <th>Pais</th>
-                        <th>PJ</th>
-                        <th>PG</th>
-                        <th>PE</th>
-                         <th>PP</th>
-                      </tr>
+<head>
+    <link rel="stylesheet" href="estadisticas.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 
-                    </thead>
-                    <tbody>
-                      <tr>
-                        
-                        <td rowspan="8" align = left>
-                          <img align = left src= "argentina.jpg" alt="bandera" width="300px" height="150px"/>
-                        </td>
-                        <td>5</td> 
-                        <td>0</td>                
-                        <td>3</td>
-                        <td>2</td>
+</style>
+</head>
+<body>
 
-                    </tbody>
-                      
-                    <tbody>
-                      </tr>
-                      <thead>
-                      <tr>
-                        
-                        <th>GF</th>
-                        <th>GC</th>
-                        <th>Porcent GFx Partido</th>
-                        <th>Porcent GC x Partido</th>
-                      </tr>
-                      <tr>
-                       
-                        <td>1</td>
-                        <td>2</td>
-                        <td>4</td>
-                        <td>5</td>
-                      </tr>
-                      </thead>
-                    </tbody>
-                  </table>
-    </body>
-  </html>
+<div class="card">
+    <img align = left src = "{{data_pais['foto']}}" alt="bandera" width="300px" height="150px"/>
+  <h1 align = center>{{data_pais['nombre'].title()}}</h1>
+  <table class="table is-bordered is-striped is-narrow is-fullwidth">
+      <thead>
+        <tr >
+          <td id = "header" colspan=4><b>Mundial 2018 Estadisticas {{data_pais['nombre'].title()}}</b></td>
+        </tr>
+      </thead>
+      <tbody>
+      <tr>
+        <td width ="25%" id = "encabezado" rowspan=1>PJ</td>
+        <td width ="25%" id = "encabezado">PG</td>
+        <td width ="25%" id = "encabezado">PE</td>
+        <td width ="25%" id = "encabezado">PP</td>
+      </tr>
+        <td>{{data_pais['partidos_jugados']}}</td>
+        <td>{{data_pais['victorias']}}</td>
+        <td>{{data_pais['empates']}}</td>
+        <td>{{data_pais['derrotas']}}</td>      
+      <tr>
+        <td width ="25%" id = "encabezado">GF</th>
+        <td width ="25%" id = "encabezado">GC</th>
+        <td width ="25%" id = "encabezado">GF x Part</th>
+        <td width ="25%" id = "encabezado">GC x Part</th>
+      </tr>
+      <td>{{data_pais['goles_favor']}}</td>
+      <td>{{data_pais['goles_contra']}}</td>
+      <td>{{data_pais['GFxP']}}</td>
+      <td>{{data_pais['GCxP']}}</td>
+
+      <tr>
+          <td colspan = "4" id = "encabezado">Estado</th>
+      </tr>
+      <td  colspan = "4" ><b>En juego.</b></td>
+      </tbody>
+    </table>
+<div>
+
+</body>
+</html>

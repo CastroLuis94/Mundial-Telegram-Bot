@@ -1,0 +1,78 @@
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+    border: 1.5pt solid black;
+    padding:0;
+  }
+  
+  .title {
+    color: grey;
+    font-size: 18px;
+  }
+  
+  button {
+    border: none;
+    outline: 0;
+    display: inline-block;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+  }
+  
+  a {
+    text-decoration: none;
+    font-size: 22px;
+    color: black;
+  }
+  
+  button:hover, a:hover {
+    opacity: 0.7;
+  }
+  
+  p {
+      size: 20px;
+      /*font-family: Helvetica, sans*/
+  }
+  
+  body {
+      font-family: sans-serif;
+      font-size: 11pt;
+      padding:0;
+  }
+  
+  th, td{
+      padding:0;
+      border: 1pt solid  black;
+      border-collapse: collapse;
+      text-align: left;
+  }
+  
+  #encabezado{
+      /*columnas titulos */
+      background: #a70000;
+      color: white;
+  }
+  
+  tr:nth-child(even){
+      background-color: #e8e8e8;
+  }
+  
+  tr:nth-child(odd){
+      background-color: white;
+  }
+  
+  #header{
+      background: #005cb7;
+      color: white;
+      font-size: 10.88pt;
+  }
+  table{
+    padding:0;
+    margin: 0;
+  }
