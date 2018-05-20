@@ -240,6 +240,7 @@ if __name__ == "__main__":
     updater.dispatcher.add_handler(CommandHandler('menuadmin', menu_admin))
     updater.dispatcher.add_handler(CommandHandler('tabla', tabla))
     updater.dispatcher.add_handler(CommandHandler('fixture', fixture))
+    updater.dispatcher.add_handler(CommandHandler('eliminar', eliminar))
     ##updater.dispatcher.add_handler(CommandHandler('listen',listener))
 
     updater.start_polling()

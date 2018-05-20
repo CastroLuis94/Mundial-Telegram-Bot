@@ -13,6 +13,11 @@ def Tarjeta(pais):
     partidos_jugados = int(victorias) + int(empates) + int(derrotas)
     GFxP = 0
     GCxP = 0
+    estado = ""
+    if pais.en_juego:
+        estado = "En Juego."
+    else:
+        estado = "Eliminado."
     if partidos_jugados != 0:
         GFxP = str(int(goles_favor) / partidos_jugados)[0:4]
         GCxP = str(int(goles_contra) / partidos_jugados)[0:4]
@@ -23,7 +28,7 @@ def Tarjeta(pais):
     with open(os.path.join(BASE_PATH,'estadisticas.html'), 'r') as f:
         template = Template(f.read())
     css = os.path.join(BASE_PATH, 'estadisticas.css')
-    img = imgkit.from_string(template.render(data_pais = data_pais), 'Stats{0}.jpg'.format(pais.nombre.upper()), css=css)
+    img = imgkit.from_string(template.render(data_pais = data_pais, estado = estado), 'Stats{0}.jpg'.format(pais.nombre.upper()), css=css)
 
 
 if __name__ == "__main__":

@@ -29,6 +29,51 @@ def menu_admin(bot,update):
 
 
 @admin_only
+def eliminar(bot, update):
+    message = update.message.text
+    message = message.lower()
+    message = message.replace('/eliminar','')
+    message = message.strip()
+    message = traducir(message)
+    if message is None:
+        update.message.reply_text(
+                'Error al ingresar el nombre del pais.'
+        )
+        return
+    session = Session()
+    pais = session.query(Pais).filter_by(nombre=message).first()
+    pais.en_juego = False
+    session.commit()
+    Tarjeta(pais)
+    update.message.reply_text(
+        'Terminado.'
+    )
+    
+
+@admin_only
+def deseliminar(bot, update):
+    message = update.message.text
+    message = message.lower()
+    message = message.replace('/deseliminar','')
+    message = message.strip()
+    message = traducir(message)
+    if message is None:
+        update.message.reply_text(
+                'Error al ingresar el nombre del pais.'
+        )
+        return
+    session = Session()
+    pais = session.query(Pais).filter_by(nombre=message).first()
+    pais.en_juego = True
+    session.commit()
+    Tarjeta(pais)
+    update.message.reply_text(
+        'Terminado.'
+    )
+
+
+
+@admin_only
 def modificar_partido(bot,update):
     message = update.message.text
     message = message.lower()
