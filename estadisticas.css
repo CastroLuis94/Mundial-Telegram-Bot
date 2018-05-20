@@ -1,6 +1,11 @@
+body, html {
+    height: 200px;
+    width: 1000px;
+}
+
 .card {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    max-width: 300px;
+    max-width: 600px;
     margin: auto;
     text-align: center;
     font-family: arial;
@@ -10,7 +15,7 @@
   
   .title {
     color: grey;
-    font-size: 18px;
+    font-size: 20px;
   }
   
   button {
@@ -42,15 +47,17 @@
   
   body {
       font-family: sans-serif;
-      font-size: 11pt;
+      font-size: 20pt;
       padding:0;
   }
   
   th, td{
       padding:0;
+    
       border: 1pt solid  black;
       border-collapse: collapse;
       text-align: left;
+      width: 600px;
   }
   
   #encabezado{
@@ -70,9 +77,6 @@
   #header{
       background: #005cb7;
       color: white;
-      font-size: 10.88pt;
+      font-size: 22pt;
   }
-  table{
-    padding:0;
-    margin: 0;
-  }
+  

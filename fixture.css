@@ -1,0 +1,37 @@
+
+p {
+    size: 20px;
+    /*font-family: Helvetica, sans*/
+}
+
+body {
+    font-family: sans-serif;
+    font-size: 11pt;
+}
+
+td{
+    border: 1pt solid  black;
+    border-collapse: collapse;
+    text-align: center;
+}
+
+th{
+    /*columnas titulos */
+    background: #a70000;
+    color: white;
+    text-align: left;
+    font-size: 15pt; 
+}
+
+tr:nth-child(even){
+    background-color: #e8e8e8;
+}
+
+tr:nth-child(odd){
+    background-color: white;
+}
+
+#header{
+    background: #005cb7;
+    color: white;
+}

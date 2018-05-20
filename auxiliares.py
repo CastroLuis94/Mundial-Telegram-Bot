@@ -48,6 +48,7 @@ sinonimos = {
     ,'senegal' : ['sénégal']
     ,'colombia' : []
     ,'japon' : ['japón','japan','日本','nippon']
+    ,'uruguay': ['u r gay']
 
 }
 

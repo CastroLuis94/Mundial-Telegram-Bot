@@ -9,8 +9,8 @@
 </head>
 <body>
 
-<div class="card">
-    <img align = left src = "{{data_pais['foto']}}" alt="bandera" width="300px" height="150px"/>
+<div id = "page" class="card">
+    <img align = left src = "{{data_pais['foto']}}" alt="bandera" width="600px" height="250px"/>
   <h1 align = center>{{data_pais['nombre'].title()}}</h1>
   <table class="table is-bordered is-striped is-narrow is-fullwidth">
       <thead>
@@ -28,7 +28,8 @@
         <td>{{data_pais['partidos_jugados']}}</td>
         <td>{{data_pais['victorias']}}</td>
         <td>{{data_pais['empates']}}</td>
-        <td>{{data_pais['derrotas']}}</td>      
+        <td>{{data_pais['derrotas']}}</td>
+      
       <tr>
         <td width ="25%" id = "encabezado">GF</th>
         <td width ="25%" id = "encabezado">GC</th>
@@ -46,7 +47,7 @@
       <td  colspan = "4" ><b>En juego.</b></td>
       </tbody>
     </table>
-<div>
+  </div>
 
 </body>
 </html>

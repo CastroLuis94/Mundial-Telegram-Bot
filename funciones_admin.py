@@ -1,6 +1,8 @@
+from auxiliares import traducir
 from crearBase import Session,Pais,Partidos
 from crear_imagen import crearTabla
-
+from crear_card import Tarjeta
+from crear_fixture import crearFixture
 id_admin = 265964072
 
 
@@ -102,7 +104,10 @@ def terminar_partido(bot,update):
     message = update.message.text
     message = message.lower()
     message = message.replace('/terminarpartido ','')
+    message = message.strip()
     equipo1, equipo2 , clase = message.split(',')
+    equipo1 = traducir(equipo1)
+    equipo2 = traducir(equipo2)
     session = Session()
     pais1 = session.query(Pais).filter_by(nombre=equipo1).first()
     pais2 = session.query(Pais).filter_by(nombre=equipo2).first()
@@ -123,6 +128,9 @@ def terminar_partido(bot,update):
     if partido_a_modificar.clase_de_partido == 'grupo':
         letra_del_grupo = session.query(Pais).filter_by(nombre=equipo1).first().grupo
         crearTabla(letra_del_grupo)
+        Tarjeta(pais1)
+        Tarjeta(pais2)
+        crearFixture(letra_del_grupo)
     update.message.reply_text(
             'Se ha modificado el partido con exito'
         )

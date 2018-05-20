@@ -8,16 +8,14 @@ BASE_PATH = os.path.dirname(os.path.realpath(__name__))
 
 
 def Tarjeta(pais):
-    pais = traducir_pais(pais.id)
-    pais = session.query(Pais).filter_by(nombre = pais).first()
     foto = "../home/luis/dev/Mundial-Telegram-Bot/banderas/{0}.jpg".format(pais.nombre)
     puntos,victorias,empates,derrotas,goles_favor,goles_contra = info_equipo(pais.nombre)
     partidos_jugados = int(victorias) + int(empates) + int(derrotas)
     GFxP = 0
     GCxP = 0
     if partidos_jugados != 0:
-        GFxP = int(goles_favor) / partidos_jugados
-        GCxP = int(goles_contra) / partidos_jugados
+        GFxP = str(int(goles_favor) / partidos_jugados)[0:4]
+        GCxP = str(int(goles_contra) / partidos_jugados)[0:4]
     data_pais = {'nombre' : pais.nombre, 'victorias' : victorias,
                     'empates' : empates, 'derrotas' : derrotas, 'goles_favor' : goles_favor,
                     'goles_contra' : goles_contra, 'foto' : foto, 'GFxP' : str(GFxP),

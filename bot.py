@@ -1,5 +1,4 @@
 import locale
-
 from telegram.ext import Updater, CommandHandler
 from auxiliares import *
 from funciones_admin import *
@@ -30,13 +29,16 @@ def help(bot, update):
 /cuantoFalta: Este comando devuelve cuantos dias, horas y minutos faltan para que empiece el mundial.
 /proximoPartido X: Este comando toma un pais y te devuelve el proximo partido de ese equipo.
 /partidosde X: Este comando toma un pais y devuelve TODOS los partidos que tiene programado ese equipo.  
-/tabla X: Toma una letra de un grupo y te devuelve la tabla de resultados de ese grupo.  """
+/tabla X: Toma una letra de un grupo y te devuelve la tabla de resultados de ese grupo. 
+/stats X: Toma un pais y devuelve las estadisticas de este. 
+/fixture X: Toma una letra y te devuelve el fixture del grupo. Proximamente tambien va a servir para mostrar los partidos de octavos-semis-final. """
   )
 
 def tabla(bot,update):
     message = update.message.text
     message = message.lower()
     message = message.replace('/tabla','')
+    message = message.replace('@mundial_2018_bot','')
     grupo = message.strip()
     bot.send_photo(chat_id=update.message.chat_id, photo=open('Tabla{0}.jpg'.format(grupo.upper()), 'rb'))
  
@@ -47,6 +49,7 @@ def grupos(bot, update):
 def datos(bot,update):
     message = update.message.text
     message = message.replace('/datos ','')
+    message = message.replace('/datos@mundial_2018_bot','')
     message = message.strip()
     mensaje = traducir(message)
     return
@@ -67,8 +70,10 @@ def cuantoFalta(bot,update):
 
 def grupo(bot, update):
     message = update.message.text
+    message = message.lower()
+    message = message.replace('/grupo ','')
+    message = message.replace('/grupo@mundial_2018_bot','')
     message = message.upper()
-    message = message.replace('/GRUPO ','')
     message = message.strip()
     grupos_del_mundial = [chr(x) for x in range(65,73)]
     if len(message) == 1:
@@ -110,7 +115,8 @@ def registrarse(bot, update):
 def proximoPartido(bot,update):
     message = update.message.text
     message = message.lower()
-    message = message.replace('/proximopartido ','')
+    message = message.replace('/proximopartido','')
+    message = message.replace('/proximopartido@mundial_2018_bot','')
     nombre = traducir(message.strip())
     if nombre is None:
         update.message.reply_text(
@@ -149,11 +155,28 @@ def proximoPartido(bot,update):
             'Este pais no tiene proximos partidos registrados.'
         )
 
+def fixture(bot,update):
+    message = update.message.text
+    message = message.lower()
+    message = message.replace('/fixture','')
+    message = message.replace('/fixture@mundial_2018_bot')
+    grupos_del_mundial = [chr(x) for x in range(65,73)]
+    if message.upper() in grupos_del_mundial:
+        grupo = message.upper()
+    else:
+        update.message.reply_text(
+            """Error de tipeo, los grupos van de la A a la H.\n""" 
+    )   
+        return
+    bot.send_photo(chat_id=update.message.chat_id, photo=open('fixture{0}.jpg'.format(grupo.upper()), 'rb'))
+    
+    
 
 def partidosde(bot,update):
     message = update.message.text
     message = message.lower()
-    message = message.replace('/partidosde ','')
+    message = message.replace('/partidosde','')
+    message = message.replace('/partidosde@mundial_2018_bot','')
     nombre = traducir(message.strip())
     if nombre is None:
         update.message.reply_text(
@@ -189,7 +212,8 @@ def partidosde(bot,update):
 def estadisticas(bot, update):
     message = update.message.text
     message = message.lower()
-    message = message.replace('/estadisticas','')
+    message = message.replace('/stats','')
+    message = message.replace('/stats@mundial_2018_bot','')
     message = message.strip()
     pais = traducir(message).upper()
     bot.send_photo(chat_id=update.message.chat_id, photo=open('Stats{0}.jpg'.format(pais), 'rb'))
@@ -201,7 +225,6 @@ def estadisticas(bot, update):
 
 if __name__ == "__main__":
     updater = Updater('502678844:AAHREBEvtxfckKlnfF38_dVpLXu7BsNpjy0')
-
     updater.dispatcher.add_handler(CommandHandler('start', start))
     updater.dispatcher.add_handler(CommandHandler('help', help))
     updater.dispatcher.add_handler(CommandHandler('grupos', grupos))
@@ -212,10 +235,11 @@ if __name__ == "__main__":
     updater.dispatcher.add_handler(CommandHandler('partidosde', partidosde))
     updater.dispatcher.add_handler(CommandHandler('modificarpartido', modificar_partido))
     updater.dispatcher.add_handler(CommandHandler('agregarpartido', agregar_partido))
-    updater.dispatcher.add_handler(CommandHandler('estadisticas', estadisticas))
+    updater.dispatcher.add_handler(CommandHandler('stats', estadisticas))
     updater.dispatcher.add_handler(CommandHandler('terminarpartido', terminar_partido))
     updater.dispatcher.add_handler(CommandHandler('menuadmin', menu_admin))
     updater.dispatcher.add_handler(CommandHandler('tabla', tabla))
+    updater.dispatcher.add_handler(CommandHandler('fixture', fixture))
     ##updater.dispatcher.add_handler(CommandHandler('listen',listener))
 
     updater.start_polling()
